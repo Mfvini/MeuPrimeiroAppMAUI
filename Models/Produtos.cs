@@ -7,7 +7,7 @@ namespace MeuPrimeiroApp.Models
 		[PrimaryKey, AutoIncrement]
 		
 		public int Id {get; set;}
-		public string Descricao {get; set;} = string.Empty;
+		public string Descricao {get; set;}
 		public double Quantidade {get; set;}
 		public double Preco {get; set;}
 	}
