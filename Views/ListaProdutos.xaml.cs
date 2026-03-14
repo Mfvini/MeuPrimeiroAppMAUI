@@ -1,21 +1,61 @@
+using MeuPrimeiroApp.Models;
+using System.Collections.ObjectModel;
+
 namespace MeuPrimeiroApp.Views
 {
 	public partial class ListaProdutos : ContentPage
 	{
+		ObservableCollection<Produtos> lista = new ObservableCollection<Produtos>(); 
+
 		public ListaProdutos()
 		{
 			InitializeComponent();
+
+			lst_produtos.ItemsSource = lista;
 		}
-		
-		private void ToolbarItem_Clicked (object sender, EventArgs e)
+
+		protected async override void OnAppearing()
+		{
+			List<Produtos> tmp = await App.Db.GetAll();
+
+			tmp.ForEach(i => lista.Add(i));
+		}
+
+		private void ToolbarItem_Clicked(object sender, EventArgs e)
 		{
 			try
 			{
-				Navigation.PushAsync (new Views.NovoProduto());
-			}catch (Exception ex)
+				Navigation.PushAsync(new Views.NovoProduto());
+
+			} catch (Exception ex)
 			{
-				DisplayAlert("ops", ex.Message, "Ok");
+				DisplayAlert("Ops", ex.Message, "OK");
 			}
+		}
+			
+		private async void txt_search_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			string q = e.NewTextValue;
+
+			lista.Clear();
+
+			List<Produtos> tmp = await App.Db.Search(q);
+
+			tmp.ForEach(i => lista.Add(i));
+		}
+		
+		private void ToolbarItem_Clicked_1(object sender, EventArgs e)
+		{
+			double soma = lista.Sum(i => i.Total);
+
+			string msg = $"O total é {soma:C}";
+
+			DisplayAlert("Total dos Produtos", msg, "OK");
+		}
+		
+		private void MenuItem_Clicked(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
