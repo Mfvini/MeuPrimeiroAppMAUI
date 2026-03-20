@@ -20,7 +20,7 @@ namespace MeuPrimeiroApp.Services
 		
 		public Task<List<Produtos>> Update(Produtos p)
 		{
-			string sql = "UPDATE Produto SET Descricao=?, Quantidade=?, Preco=? WHERE Id=?";
+			string sql = "UPDATE Produtos SET Descricao=?, Quantidade=?, Preco=? WHERE Id=?";
 			
 			return _conn.QueryAsync<Produtos>(
 				sql, p.Descricao, p.Quantidade, p.Preco, p.Id
@@ -39,7 +39,7 @@ namespace MeuPrimeiroApp.Services
 		
 		public Task<List<Produtos>> Search(string q)
 		{
-			string sql = "SELECT * Produtos WHERE descricao LIKE '%" + q + "%'";
+			string sql = "SELECT * FROM Produtos WHERE descricao LIKE '%" + q + "%'";
 			return _conn.QueryAsync<Produtos>(sql);
 		}
 	}
