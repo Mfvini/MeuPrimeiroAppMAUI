@@ -48,6 +48,7 @@ namespace MeuPrimeiroApp.Views
 			try
 			{
 				string q = e.NewTextValue;
+				lst_produtos.IsRefreshing = true;
 
 				lista.Clear();
 
@@ -58,6 +59,10 @@ namespace MeuPrimeiroApp.Views
 			catch (Exception ex)
 			{
 				await DisplayAlert("Ops", ex.Message, "Ok");
+			}
+			finally
+			{
+				lst_produtos.IsRefreshing = false;
 			}
 		}
 		
@@ -109,6 +114,37 @@ namespace MeuPrimeiroApp.Views
 				DisplayAlert("Ops", ex.Message, "OK");  
 			}
 
+		}
+		
+		private  async void lst_produtos_Refreshing(object sender, EventArgs e)
+		{
+			try
+			{
+				lista.Clear();
+				
+				List<Produtos> tmp = await App.Db.GetAll();
+
+				tmp.ForEach(i => lista.Add(i));
+			}
+			catch (Exception ex)
+			{
+				await DisplayAlert("Ops", ex.Message, "Ok");
+			} finally
+			{
+				lst_produtos.IsRefreshing = false;
+			}
+		}
+		
+		private async void BtnVerRelatorio_Clicked(object sender, EventArgs e)
+		{
+			try 
+			{
+				await Navigation.PushAsync(new Views.RelatorioPage());
+			}
+			catch (Exception ex)
+			{
+				await DisplayAlert("Erro", "Não foi possível abrir o relatório: " + ex.Message, "OK");
+			}
 		}
 	}
 }

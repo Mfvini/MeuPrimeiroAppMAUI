@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MeuPrimeiroApp.Views.RelatorioPage"
+             Title="Relatório de Gastos">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Label Text="Filtro por Período" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+
+        <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+            <VerticalStackLayout>
+                <Label Text="Início:" />
+                <DatePicker x:Name="dtp_inicio" Format="dd/MM/yyyy" />
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label Text="Fim:" />
+                <DatePicker x:Name="dtp_fim" Format="dd/MM/yyyy" />
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+
+        <Button Text="Gerar Relatório" 
+                Clicked="BtnGerar_Clicked" 
+                BackgroundColor="{StaticResource Primary}" 
+                TextColor="White" />
+
+        <BoxView HeightRequest="1" Color="{StaticResource Gray200}" />
+
+        <ListView x:Name="lst_relatorio">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Categoria}" 
+                              Detail="{Binding TotalGasto, StringFormat='Total: {0:C}'}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </VerticalStackLayout>
+</ContentPage>

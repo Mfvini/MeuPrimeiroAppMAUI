@@ -16,7 +16,7 @@ namespace MeuPrimeiroApp
 					string path = Path.Combine(
 						Environment.GetFolderPath(
 							Environment.SpecialFolder.LocalApplicationData),
-							"banco_sqlite_compras.db3");
+							"banco_sqlite_compras_v2.db3");
 					
 					_db = new DatabaseService(path);
 				}
@@ -29,6 +29,8 @@ namespace MeuPrimeiroApp
 		public App()
 		{
 			InitializeComponent();
+			
+			Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("pt-BR");
 		
 			MainPage = new NavigationPage(new Views.ListaProdutos());
 		}

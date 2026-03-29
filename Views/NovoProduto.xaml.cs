@@ -17,11 +17,16 @@ namespace MeuPrimeiroApp.Views
 				{
 					Descricao = txt_descricao.Text,
 					Quantidade = Convert.ToDouble(txt_quantidade.Text),
-					Preco = Convert.ToDouble(txt_preco.Text)
+					Preco = Convert.ToDouble(txt_preco.Text),
+					//Salvando Categoria e Data
+					Categoria = pck_categoria.SelectedItem?.ToString() ?? "Outros",
+					DataCadastro = dtp_data.Date
+					
 				};
 				
 				await App.Db.Insert (p);
 				await DisplayAlert("Sucesso!", "Registro Inserido", "Ok");
+				await Navigation.PopAsync();
 				
 			}catch(Exception ex)
 			{

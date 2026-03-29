@@ -20,10 +20,10 @@ namespace MeuPrimeiroApp.Services
 		
 		public Task<List<Produtos>> Update(Produtos p)
 		{
-			string sql = "UPDATE Produtos SET Descricao=?, Quantidade=?, Preco=? WHERE Id=?";
+			string sql = "UPDATE Produtos SET Descricao=?, Quantidade=?, Preco=?, Categoria=?, DataCadastro=? WHERE Id=?";
 			
 			return _conn.QueryAsync<Produtos>(
-				sql, p.Descricao, p.Quantidade, p.Preco, p.Id
+				sql, p.Descricao, p.Quantidade, p.Preco, p.Categoria, p.DataCadastro, p.Id
 			);
 		}
 		
@@ -40,8 +40,32 @@ namespace MeuPrimeiroApp.Services
 		public Task<List<Produtos>> Search(string q)
 		{
 			string sql = "SELECT * FROM Produtos WHERE descricao LIKE '%" + q + "%'";
-			return _conn.QueryAsync<Produtos>(sql);
+			return _conn.QueryAsync<Produtos>(sql, $"%{q}%");
 		}
-	}
+		
+		//Filtro por categoria específica
+		public Task<List<Produtos>> GetByCategoria(string categoria)
+		{
+			return _conn.Table<Produtos>().Where(i => i.Categoria == categoria).ToListAsync();
+		}
+		
+		//Relatório Soma do Total agrupado por Categoria
+		public async Task<List<RelatorioCategoria>> GetGastosPorCategoria(DateTime inicio, DateTime fim)
+		{
+			string sql = "SELECT Categoria, SUM(Quantidade * Preco) as TotalGasto " +
+						 "FROM Produtos " +
+						 "WHERE DataCadastro BETWEEN ? AND ? " +
+						 "GROUP BY Categoria";
+			return await _conn.QueryAsync<RelatorioCategoria>(sql, inicio, fim);
+		}
 	
+		
+		public Task<List<Produtos>> GetByPeriodo(DateTime inicio, DateTime fim)
+		{
+			return _conn.Table<Produtos>()
+						.Where(i => i.DataCadastro >= inicio && i.DataCadastro <= fim)
+						.ToListAsync();
+		}
+		
+	}
 }
